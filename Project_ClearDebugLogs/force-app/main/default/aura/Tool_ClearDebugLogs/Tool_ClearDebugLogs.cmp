@@ -1,0 +1,30 @@
+<aura:component  implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,lightning:availableforFlowScreens" description="Component used to simulate multiple IVR calls with specified time gap between both the calls" controller="Tool_ClearDebugLogsController">
+    <aura:attribute name="initiated" type="Boolean" default="false"/>
+    <aura:attribute name="userIds" type="List" description="List of User Ids whose logs need to be deleted. If blank/null, all debug logs will be deleted irrespective of who created"/>
+    <aura:attribute name="keepTodaysLogs" type="Boolean" default="false" description="if true, we will not delete today's logs"/>
+    <aura:attribute name="status" type="Integer" default="0"/>
+    <aura:attribute name="interval" type="String" default=""/>
+    
+    <lightning:card title="Clear Debug Logs">
+        <lightning:layout multipleRows="true">
+            <aura:if isTrue="{!v.initiated}">
+                <lightning:layoutItem padding="around-small" size="5"></lightning:layoutItem>
+                <lightning:layoutItem padding="around-small" size="2">
+                    <lightning:progressRing value="{!v.status}" size="large" variant="base-autocomplete"/> 
+                    <lightning:button class="slds-button slds-button--brand" aura:id="abort" label="Abort" onclick="{!c.abortJob}" title="Aborting the Job doesn't recover the logs deleted already.!"/>
+                </lightning:layoutItem>
+                <lightning:layoutItem padding="around-small" size="5"></lightning:layoutItem>
+            </aura:if>
+            <lightning:layoutItem padding="around-small" size="4">
+                <label for="keepTodaysLogs" aria-hidden="true"><b>Keep Today's Logs :</b></label>
+            </lightning:layoutItem>
+            <lightning:layoutItem padding="around-small" size="1">
+                <lightning:input aura:id="keepTodaysLogs" type="toggle" name="keepTodaysLogs" checked="{!v.keepTodaysLogs}" disabled="{!v.initiated}" messageToggleActive="Yes" messageToggleInactive="No" variant="label-hidden"/>
+            </lightning:layoutItem>
+            <lightning:layoutItem padding="around-small" size="12">
+                <lightning:button class="slds-button slds-button--brand" aura:id="deleteAllLogs" label="Delete All Debug Logs" disabled="{!v.initiated}" onclick="{!c.deleteAllDebugLogs}"/>
+                <lightning:button class="slds-button slds-button--brand" aura:id="deleteMyLogs" label="Delete Only My Debug Logs" disabled="{!v.initiated}" onclick="{!c.deleteMyDebugLogs}"/>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </lightning:card>
+</aura:component>
